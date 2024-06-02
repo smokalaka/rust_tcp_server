@@ -9,9 +9,11 @@ fn handle_client(mut stream: TcpStream) {
     let request = String::from_utf8_lossy(&buffer[..]);
     println!("Received request: {}", request);
 
-    let response = "Hello, Client!".as_bytes();
-
-    stream.write(response).expect("Failed to write response!");
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {}\r\n\r\nHello, Client!",
+        "Hello, Client!".len()
+    );
+    stream.write_all(response.as_bytes()).expect("Failed to write response!");
 }
 
 pub fn main() {
